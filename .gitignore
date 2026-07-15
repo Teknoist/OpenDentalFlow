@@ -2,6 +2,9 @@
 **/obj/
 **/node_modules/
 **/dist/
+release/
+backend/OpenDentalFlow.Api/wwwroot/
+OpenDentalFlow-Windows-*.zip
 *.db
 *.db-shm
 *.db-wal

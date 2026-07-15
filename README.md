@@ -15,6 +15,12 @@ The print layer is represented by `ILabelService`; ZPL/TSPL implementations can 
 
 ## Requirements / Gereksinimler
 
+### Tek program olarak kullanım / One-click Windows app
+
+GitHub Releases bölümünden `OpenDentalFlow-Windows-x64-v1.0.0.zip` dosyasını indirin, klasöre çıkarın ve `OpenDentalFlow.exe` dosyasını çalıştırın. .NET veya Node.js kurulumu gerekmez; tarayıcı otomatik açılır. Veritabanı ve fotoğraflar `%LOCALAPPDATA%\OpenDentalFlow` altında kalıcı saklanır. Aynı Wi-Fi ağındaki telefonlar `http://SUNUCU-IP:5080` adresini açabilir.
+
+Download `OpenDentalFlow-Windows-x64-v1.0.0.zip` from GitHub Releases, extract it, and run `OpenDentalFlow.exe`. No .NET or Node.js installation is required. Persistent data is stored under `%LOCALAPPDATA%\OpenDentalFlow`.
+
 - .NET 8 SDK
 - Node.js 20+ and npm
 - Windows 10/11 or another OS supported by .NET
@@ -103,6 +109,8 @@ dotnet test OpenDentalFlow.sln
 cd frontend
 npm run build
 ```
+
+Maintainers can reproduce the Windows package with `./build-windows.ps1`.
 
 ## License
 
