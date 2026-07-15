@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{CFE03A01-E19E-4B51-B124-27C4350BFFE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentalFlow.Api", "backend\OpenDentalFlow.Api\OpenDentalFlow.Api.csproj", "{431C9F48-4D56-4834-8AB8-75E1C02C7FF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentalFlow.Tests", "backend\OpenDentalFlow.Tests\OpenDentalFlow.Tests.csproj", "{8592FC85-828C-469E-A4A9-4567706F3180}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{431C9F48-4D56-4834-8AB8-75E1C02C7FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431C9F48-4D56-4834-8AB8-75E1C02C7FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431C9F48-4D56-4834-8AB8-75E1C02C7FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431C9F48-4D56-4834-8AB8-75E1C02C7FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8592FC85-828C-469E-A4A9-4567706F3180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8592FC85-828C-469E-A4A9-4567706F3180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8592FC85-828C-469E-A4A9-4567706F3180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8592FC85-828C-469E-A4A9-4567706F3180}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{431C9F48-4D56-4834-8AB8-75E1C02C7FF3} = {CFE03A01-E19E-4B51-B124-27C4350BFFE4}
+		{8592FC85-828C-469E-A4A9-4567706F3180} = {CFE03A01-E19E-4B51-B124-27C4350BFFE4}
+	EndGlobalSection
+EndGlobal
