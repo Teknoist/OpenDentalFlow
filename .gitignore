@@ -5,6 +5,7 @@
 release/
 backend/OpenDentalFlow.Api/wwwroot/
 OpenDentalFlow-Windows-*.zip
+OpenDentalLab-Windows-*.zip
 *.db
 *.db-shm
 *.db-wal

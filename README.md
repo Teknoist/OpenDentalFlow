@@ -1,32 +1,78 @@
-# OpenDentalFlow / Açık Diş Laboratuvarı Akışı
+# OpenDental Lab
 
-OpenDentalFlow is an open-source, local-network-first dental laboratory job tracking MVP. It combines patient/job numbering, QR and Code 128 labels, a responsive React panel, anonymous limited QR pages, photos, notes, status history and role-based API security.
+[English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md)
 
-OpenDentalFlow; hasta/iş kodlama, QR ve Code 128 etiketleri, mobil uyumlu React paneli, sınırlı anonim QR sayfaları, fotoğraflar, notlar, durum geçmişi ve rol tabanlı API güvenliğini birleştiren açık kaynak, yerel ağ odaklı bir diş laboratuvarı MVP’sidir.
+OpenDental Lab is an open-source, local-network-first case tracking application for dental laboratories. A single Windows application provides the desktop management UI, hosts the mobile QR pages for trusted LAN devices, stores data in SQLite and prints 70 × 50 mm labels directly to a selected Windows printer.
 
-## Architecture / Mimari
+> This independent project is not affiliated with the established Open Dental practice-management product. “Lab” is part of the displayed name to make its dental-laboratory scope clear.
 
-- `backend/OpenDentalFlow.Api`: ASP.NET Core 8, EF Core, SQLite, JWT, Swagger, QRCoder, BarcodeLib
-- `backend/OpenDentalFlow.Tests`: xUnit critical service and constraint tests
-- `frontend`: React, TypeScript and Vite management/mobile UI
-- `backend/OpenDentalFlow.Api/Data/Migrations`: reproducible SQLite schema
+> **Demo privacy notice:** Every patient and clinic name, contact detail, job, date, note and image shown in this repository, its screenshots and the seeded demo database is entirely fictional and randomly created for demonstration. None represents or refers to a real person, patient, clinic or clinical case.
 
-The print layer is represented by `ILabelService`; ZPL/TSPL implementations can be added without changing controllers. File storage is behind `IFileStorage`.
+![English dashboard](docs/screenshots/dashboard-en-v14.png)
 
-## Requirements / Gereksinimler
+## Highlights
 
-### Tek program olarak kullanım / One-click Windows app
+- Immutable clinic-based patient codes (`MRD-042`) and per-patient job codes (`MRD-042-2`) protected by transactions and unique constraints.
+- One patient record can contain multiple jobs and a chronological laboratory activity history.
+- QR URLs contain only an unpredictable 80-bit access token; no patient name is embedded in the code.
+- Code 128 and QR label, native silent printing, configurable default printer and a built-in PNG test printer.
+- Fast keyboard workflow: `Enter` advances fields, `F3` opens job search, `F9` saves and `F10` saves then prints.
+- FDI tooth selector, type/material catalog, automatic default material, digital-model flag and duplicate-patient warning.
+- Search by patient, clinic, patient/job code or USB barcode scanner input.
+- Responsive public job page for camera/gallery uploads and notes without installing an app.
+- Secure photo pipeline: JPEG/PNG/WebP signature validation, decode verification, random names, EXIF removal by re-encoding, resizing, thumbnails and configurable size limit.
+- Searchable gallery with category filters, full-size preview, category editing, missing-file fallback and authorized deletion.
+- Turkish, English and German UI; persistent light/dark themes.
+- Administrator, employee and view-only roles; user editing, password reset and activation controls.
+- One-click SQLite + photo ZIP backup and administrator-controlled QR revocation/regeneration.
+- Swagger/OpenAPI and Android share-intent-ready lookup, multi-upload and note endpoints.
 
-GitHub Releases bölümünden `OpenDentalFlow-Windows-x64-v1.0.0.zip` dosyasını indirin, klasöre çıkarın ve `OpenDentalFlow.exe` dosyasını çalıştırın. .NET veya Node.js kurulumu gerekmez; tarayıcı otomatik açılır. Veritabanı ve fotoğraflar `%LOCALAPPDATA%\OpenDentalFlow` altında kalıcı saklanır. Aynı Wi-Fi ağındaki telefonlar `http://SUNUCU-IP:5080` adresini açabilir.
+![Photo gallery](docs/screenshots/gallery-en-v14.png)
 
-Download `OpenDentalFlow-Windows-x64-v1.0.0.zip` from GitHub Releases, extract it, and run `OpenDentalFlow.exe`. No .NET or Node.js installation is required. Persistent data is stored under `%LOCALAPPDATA%\OpenDentalFlow`.
+## Barcode and label workflow
 
-- .NET 8 SDK
-- Node.js 20+ and npm
-- Windows 10/11 or another OS supported by .NET
-- Phones and server connected to the same trusted Wi-Fi/LAN
+![QR and Code 128 label preview](docs/screenshots/barcode-label-en-v14-v3.png)
 
-## Setup / Kurulum
+- Each job has one immutable human-readable job code, for example `MRD-001-1`.
+- The linear barcode is **Code 128** and contains only that job code. It does not contain the patient name, notes, photo data or QR access token.
+- The QR code is separate. It contains the configured LAN URL plus the job's unpredictable public access token and opens the limited mobile job page.
+- The label preview obtains both images from `GET /api/jobs/{id}/label`; standalone PNG endpoints are also available at `/label/barcode` and `/label/qr`.
+- A USB barcode scanner normally behaves like a keyboard. Keep the quick-search field focused, scan the label and let the scanner send its configured `Enter/CR` suffix. The UI calls the exact job-code lookup and opens that job directly.
+- `F9` saves without printing. `F10` saves and sends the 70 × 50 mm label directly to the Windows printer selected in Settings, without a browser print dialog.
+- Select **OpenDental Test Printer (PNG)** to test without hardware. For physical scanners, enable Code 128 and configure an `Enter` suffix in the scanner manual.
+
+The printed label may visibly show the patient name for laboratory handling, but neither the Code 128 barcode nor the QR URL embeds that name. The native print service is abstracted for future ZPL/TSPL transports.
+
+## Technology
+
+- ASP.NET Core 8 Web API, Entity Framework Core and SQLite
+- React, TypeScript and Vite
+- WPF + WebView2 standalone Windows shell
+- QRCoder, BarcodeLib, SkiaSharp, BCrypt and JWT
+- xUnit tests and EF Core migrations
+
+## One-click Windows package
+
+Extract `OpenDentalLab-Windows-x64-v1.4.0-test.zip` and run `OpenDentalLab.exe`. No terminal, browser, Node.js or .NET installation is needed. The app opens in its own desktop window and serves trusted phones on TCP port `5080`.
+
+Persistent data is stored outside the application directory:
+
+```text
+%LOCALAPPDATA%\OpenDentalFlow\
+  opendentalflow.db
+  uploads\
+  backups\
+  TestPrints\
+```
+
+Upgrades therefore do not overwrite the database or photos.
+
+Initial administrator: `admin` / `Admin123!`<br>
+Change this password before entering real patient data. Login fields intentionally open empty.
+
+## Development setup
+
+Requirements: Windows 10/11 x64, .NET 8 SDK, Node.js 20+ and Edge WebView2 Runtime.
 
 ```powershell
 git clone https://github.com/Teknoist/OpenDentalFlow.git
@@ -34,84 +80,93 @@ cd OpenDentalFlow
 dotnet restore
 cd frontend
 npm install
+npm run build
 ```
 
-Configure `backend/OpenDentalFlow.Api/appsettings.json`: change `Jwt:Key`, choose the SQLite path, upload limit and `PublicBaseUrl`. For production-like use, do not retain the sample secret or password.
+Run the API/desktop shell:
 
-## Database migration / Veritabanı migration
+```powershell
+dotnet run --project backend/OpenDentalFlow.Api
+```
+
+For frontend development, keep the API running and start Vite:
+
+```powershell
+cd frontend
+npm run dev -- --host 0.0.0.0
+```
+
+- Desktop/API: `http://localhost:5080`
+- Vite: `http://localhost:5173`
+- Swagger: `http://localhost:5080/swagger`
+
+## Database and demo data
+
+Pending migrations run automatically at startup. Manual migration:
 
 ```powershell
 dotnet tool install --global dotnet-ef --version 8.*
 dotnet ef database update --project backend/OpenDentalFlow.Api --startup-project backend/OpenDentalFlow.Api
 ```
 
-The API also runs pending migrations on startup and seeds one clinic, patient and job when the database is empty.
+A new empty installation receives realistic synthetic demo clinics, patients, jobs, activities, notes and two AI-generated laboratory images. All displayed names, records and image contents are fictional and randomly created exclusively for demonstration; they contain no real patient, clinic or identifying data. Seeding runs only when the user table is empty and never replaces an existing installation.
 
-## Run / Çalıştırma
+## Local network and `lab.local`
 
-Terminal 1:
+1. Connect the server PC and phones to the same trusted LAN/Wi-Fi.
+2. Find the server IPv4 address with `ipconfig`.
+3. Test `http://SERVER-IP:5080` on a phone. Port `5173` is development-only and must not be used by the packaged application.
+4. In **Settings**, set the QR base URL to that address or preferably `http://lab.local:5080`.
+5. Test the exact QR URL before printing permanent labels.
+
+Allow only the Private Windows network profile:
 
 ```powershell
-dotnet run --project backend/OpenDentalFlow.Api
+New-NetFirewallRule -DisplayName "OpenDental Lab LAN" -Direction Inbound -Protocol TCP -LocalPort 5080 -Action Allow -Profile Private
 ```
 
-Swagger: `http://localhost:5080/swagger`
+A router DNS reservation/local DNS entry is the most reliable `lab.local` solution. Pi-hole or AdGuard Home also works. A Windows `hosts` entry helps Windows clients, but Android normally needs router/local DNS. A stable hostname prevents old printed QR labels from breaking after DHCP changes.
 
-Terminal 2:
+## Thermal printing
 
-```powershell
-cd frontend
-$env:VITE_API_URL="http://localhost:5080/api"
-npm run dev -- --host 0.0.0.0
-```
+Install the printer manufacturer’s Windows driver and create a borderless 70 × 50 mm paper profile. Select it under **Settings → Default label printer**. `F10` sends the label directly through the native Windows print layer without opening a browser dialog.
 
-Panel: `http://localhost:5173`
+For hardware-free testing, select **OpenDental Test Printer (PNG)**. Labels are saved under `%LOCALAPPDATA%\OpenDentalFlow\TestPrints` at 200 DPI. The print service is abstracted so ZPL and TSPL transports can be added later.
 
-Default development account / Varsayılan geliştirme hesabı: `admin` / `Admin123!`. Change it before real patient data is entered.
+## Security notes
 
-## Local network / Yerel ağ erişimi
+- Do not expose this MVP directly to the public internet.
+- Replace the sample JWT key and initial password before real use.
+- QR access is deliberately limited: it cannot edit core records, change clinics, delete patients/jobs, show prices or manage users.
+- Public QR endpoints are rate-limited; management endpoints require JWT and role authorization.
+- EF Core parameterizes SQL; database constraints are the final concurrency guard.
+- Uploads reject unsupported or corrupt content and never use client filenames as storage paths.
+- Patient data is sensitive. Define lawful consent, retention, access, audit and backup policies for your jurisdiction.
+- Keep encrypted copies of the generated backups outside the laboratory PC and test restoration regularly.
 
-Find the server’s IPv4 address with `ipconfig`, set `VITE_API_URL=http://192.168.x.x:5080/api`, set `PublicBaseUrl=http://192.168.x.x:5173`, and restart both services. Open TCP ports 5080 and 5173 only for the Private network profile:
+## Assumptions
 
-```powershell
-New-NetFirewallRule -DisplayName "OpenDentalFlow API" -Direction Inbound -Protocol TCP -LocalPort 5080 -Action Allow -Profile Private
-New-NetFirewallRule -DisplayName "OpenDentalFlow Web" -Direction Inbound -Protocol TCP -LocalPort 5173 -Action Allow -Profile Private
-```
+- One installation represents one laboratory; clinic short codes are unique within it.
+- The MVP uses 12-hour stateless JWT sessions. Refresh tokens and self-service recovery are not included.
+- SQLite is appropriate for a single local server and thousands of indexed jobs; move to PostgreSQL/SQL Server for multi-site or high-write deployments.
+- Android is not required for the MVP. Existing endpoints support a later Android share-intent client.
+- Pricing, invoicing and internet/cloud synchronization are intentionally outside this case-tracking MVP.
 
-Prefer a stable `lab.local` hostname so printed QR labels survive DHCP address changes. A router DNS reservation/local DNS entry is the best option. For a small Windows-only setup, add `SERVER_IP lab.local` to `C:\Windows\System32\drivers\etc\hosts` on each client; Android generally requires router DNS, Pi-hole/AdGuard Home, or mDNS-compatible hosting. Test the exact URL from a phone before printing labels.
-
-## Thermal printer / Termal yazıcı
-
-Install the manufacturer’s Windows driver and create a 70 × 50 mm paper profile with margins disabled. Open a job’s label page, choose the thermal printer, scale 100%, disable headers/footers and print. The stylesheet contains `@page { size: 70mm 50mm; margin: 0 }`.
-
-## Security / Güvenlik
-
-- Access tokens use 80 random bits and carry no patient data.
-- JWT protects management endpoints; public QR endpoints expose only job-scoped operations.
-- Passwords use BCrypt. EF Core parameterizes SQL and database unique constraints protect numbering.
-- Uploads receive random server filenames, sanitized original names, MIME allow-listing and configurable size limits.
-- Never expose this MVP directly to the public internet. Use a trusted LAN, backups, HTTPS reverse proxy where possible, strong passwords and restricted firewall rules.
-- Rotate the seeded credentials and JWT key. Patient data is sensitive; establish retention, consent, backup and access policies appropriate to your jurisdiction.
-
-## Assumptions / Varsayımlar
-
-- One installation represents one laboratory; clinic short codes are therefore globally unique in its database.
-- MVP authentication uses stateless 12-hour JWT sessions; refresh tokens and account recovery are deferred.
-- SQLite serializes write transactions; unique constraints are the final concurrency guard. Failed collisions return HTTP 409 and are safe to retry.
-- Photos are stored under the API content root. Original bytes are retained; EXIF stripping and thumbnail generation should be enabled with a separately reviewed image pipeline before production clinical use.
-- Prices are intentionally absent. The QR page cannot delete or change core records.
-- Android is not included; the job-code/token lookup and multipart upload endpoints are ready for Android share-intent integration.
-
-## Validation / Doğrulama
+## Validation and packaging
 
 ```powershell
+dotnet build OpenDentalFlow.sln
 dotnet test OpenDentalFlow.sln
 cd frontend
 npm run build
 ```
 
-Maintainers can reproduce the Windows package with `./build-windows.ps1`.
+Create the self-contained Windows package from the repository root:
+
+```powershell
+.\build-windows.ps1
+```
 
 ## License
 
-Open source under the MIT License. Contributions in Turkish or English are welcome.
+[MIT](LICENSE). Contributions in Turkish, English or German are welcome.

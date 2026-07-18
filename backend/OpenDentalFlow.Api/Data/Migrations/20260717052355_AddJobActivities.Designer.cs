@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenDentalFlow.Api.Data;
 
@@ -10,9 +11,11 @@ using OpenDentalFlow.Api.Data;
 namespace OpenDentalFlow.Api.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717052355_AddJobActivities")]
+    partial class AddJobActivities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.19");
@@ -38,9 +41,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Notes")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
@@ -83,9 +83,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("DigitalModelRequired")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("TEXT");
@@ -234,9 +231,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ThumbnailStoredFileName")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("UploadedAt")
                         .HasColumnType("TEXT");
 
@@ -279,63 +273,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                     b.HasIndex("JobId");
 
                     b.ToTable("JobStatusHistory");
-                });
-
-            modelBuilder.Entity("OpenDentalFlow.Api.Domain.JobTypeDefinition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DefaultMaterial")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("JobTypes");
-                });
-
-            modelBuilder.Entity("OpenDentalFlow.Api.Domain.MaterialDefinition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("OpenDentalFlow.Api.Domain.Patient", b =>

@@ -13,5 +13,5 @@ New-Item -ItemType Directory -Force $wwwroot | Out-Null
 Copy-Item -Recurse (Join-Path $frontend "dist/*") $wwwroot
 if (Test-Path $release) { Remove-Item -Recurse -Force $release }
 dotnet publish (Join-Path $api "OpenDentalFlow.Api.csproj") -c Release -r win-x64 --self-contained true -o $release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false
-Compress-Archive -Path (Join-Path $release "*") -DestinationPath (Join-Path $root "OpenDentalFlow-Windows-x64-v1.0.0.zip") -Force
-Write-Host "Hazir: OpenDentalFlow-Windows-x64-v1.0.0.zip"
+Compress-Archive -Path (Join-Path $release "*") -DestinationPath (Join-Path $root "OpenDentalLab-Windows-x64-v1.4.0-test.zip") -Force
+Write-Host "Hazir: OpenDentalLab-Windows-x64-v1.4.0-test.zip"

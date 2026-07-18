@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenDentalFlow.Api.Data;
 
@@ -10,9 +11,11 @@ using OpenDentalFlow.Api.Data;
 namespace OpenDentalFlow.Api.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717051922_AddJobQueryIndexes")]
+    partial class AddJobQueryIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.19");
@@ -38,9 +41,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Notes")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
@@ -83,9 +83,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("DigitalModelRequired")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("TEXT");
@@ -149,35 +146,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("OpenDentalFlow.Api.Domain.JobActivity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("StepType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId", "CreatedAt");
-
-                    b.ToTable("JobActivities");
-                });
-
             modelBuilder.Entity("OpenDentalFlow.Api.Domain.JobNote", b =>
                 {
                     b.Property<int>("Id")
@@ -234,9 +202,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ThumbnailStoredFileName")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("UploadedAt")
                         .HasColumnType("TEXT");
 
@@ -281,63 +246,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                     b.ToTable("JobStatusHistory");
                 });
 
-            modelBuilder.Entity("OpenDentalFlow.Api.Domain.JobTypeDefinition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DefaultMaterial")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("JobTypes");
-                });
-
-            modelBuilder.Entity("OpenDentalFlow.Api.Domain.MaterialDefinition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Materials");
-                });
-
             modelBuilder.Entity("OpenDentalFlow.Api.Domain.Patient", b =>
                 {
                     b.Property<int>("Id")
@@ -378,8 +286,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
 
                     b.HasIndex("ClinicId", "ClinicSequence")
                         .IsUnique();
-
-                    b.HasIndex("ClinicId", "FirstName", "LastName");
 
                     b.ToTable("Patients");
                 });
@@ -457,17 +363,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("OpenDentalFlow.Api.Domain.JobActivity", b =>
-                {
-                    b.HasOne("OpenDentalFlow.Api.Domain.Job", "Job")
-                        .WithMany("Activities")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-                });
-
             modelBuilder.Entity("OpenDentalFlow.Api.Domain.JobNote", b =>
                 {
                     b.HasOne("OpenDentalFlow.Api.Domain.Job", "Job")
@@ -519,8 +414,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
 
             modelBuilder.Entity("OpenDentalFlow.Api.Domain.Job", b =>
                 {
-                    b.Navigation("Activities");
-
                     b.Navigation("Notes");
 
                     b.Navigation("Photos");

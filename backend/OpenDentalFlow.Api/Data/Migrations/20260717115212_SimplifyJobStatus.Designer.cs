@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenDentalFlow.Api.Data;
 
@@ -10,9 +11,11 @@ using OpenDentalFlow.Api.Data;
 namespace OpenDentalFlow.Api.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717115212_SimplifyJobStatus")]
+    partial class SimplifyJobStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.19");
@@ -232,9 +235,6 @@ namespace OpenDentalFlow.Api.Data.Migrations
 
                     b.Property<string>("StoredFileName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ThumbnailStoredFileName")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UploadedAt")
