@@ -6,6 +6,8 @@ OpenDental Lab, diş laboratuvarları için açık kaynak ve yerel ağ öncelikl
 
 > Bu bağımsız proje, mevcut Open Dental klinik yönetim ürünüyle bağlantılı değildir. Görünen isimdeki “Lab” ifadesi laboratuvar kapsamını belirtir.
 
+> **Demo ve gizlilik uyarısı:** Bu depoda, ekran görüntülerinde ve başlangıç demo veritabanında görülen hasta/klinik isimleri, iletişim bilgileri, işler, tarihler, notlar ve görsel içerikleri tamamen kurgusal ve demo amacıyla rastgele oluşturulmuştur. Hiçbiri gerçek bir kişi, hasta, klinik veya klinik vakayı temsil etmez.
+
 ![İngilizce gösterge ekranı](docs/screenshots/dashboard-en-v14.png)
 
 ## Öne çıkan özellikler
@@ -69,7 +71,7 @@ dotnet tool install --global dotnet-ef --version 8.*
 dotnet ef database update --project backend/OpenDentalFlow.Api --startup-project backend/OpenDentalFlow.Api
 ```
 
-Yeni boş kurulumda gerçekçi fakat tamamen sentetik klinik, hasta, iş, işlem geçmişi, not ve iki laboratuvar görseli oluşturulur. Görseller gerçek hastaya ait değildir. Mevcut veritabanı asla demo veriyle değiştirilmez.
+Yeni boş kurulumda gerçekçi fakat tamamen sentetik klinik, hasta, iş, işlem geçmişi, not ve iki laboratuvar görseli oluşturulur. Gösterilen tüm isimler, kayıtlar ve görsel içerikleri yalnızca demo için kurgusal ve rastgele üretilmiştir; gerçek hasta, klinik veya kimlik bilgisi içermez. Mevcut veritabanı asla demo veriyle değiştirilmez.
 
 ## Yerel ağ, Firewall ve `lab.local`
 

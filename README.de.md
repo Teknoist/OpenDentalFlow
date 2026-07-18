@@ -6,6 +6,8 @@ OpenDental Lab ist eine quelloffene, lokale Auftragsverwaltung für Dentallabore
 
 > Dieses unabhängige Projekt ist nicht mit dem etablierten Praxisverwaltungssystem Open Dental verbunden. „Lab“ kennzeichnet den Dentallabor-Fokus.
 
+> **Demo- und Datenschutzhinweis:** Sämtliche Patienten- und Kliniknamen, Kontaktdaten, Aufträge, Daten, Notizen und Bildinhalte in diesem Repository, den Screenshots und der Demo-Datenbank sind vollständig fiktiv und zufällig zu Demonstrationszwecken erstellt. Sie beziehen sich nicht auf reale Personen, Patienten, Kliniken oder klinische Fälle.
+
 ![Englische Übersicht](docs/screenshots/dashboard-en-v14.png)
 
 ## Funktionen
@@ -69,7 +71,7 @@ dotnet tool install --global dotnet-ef --version 8.*
 dotnet ef database update --project backend/OpenDentalFlow.Api --startup-project backend/OpenDentalFlow.Api
 ```
 
-Eine neue leere Installation erhält realistische, vollständig synthetische Kliniken, Patienten, Aufträge, Aktivitäten, Notizen und zwei Laborbilder. Die Bilder enthalten keine echten Patienten- oder Identitätsdaten. Vorhandene Installationen werden nie überschrieben.
+Eine neue leere Installation erhält realistische, vollständig synthetische Kliniken, Patienten, Aufträge, Aktivitäten, Notizen und zwei Laborbilder. Alle dargestellten Namen, Datensätze und Bildinhalte sind ausschließlich für die Demo fiktiv und zufällig erstellt; sie enthalten keine realen Patienten-, Klinik- oder Identitätsdaten. Vorhandene Installationen werden nie überschrieben.
 
 ## Lokales Netzwerk, Firewall und `lab.local`
 

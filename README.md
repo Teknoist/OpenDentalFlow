@@ -6,6 +6,8 @@ OpenDental Lab is an open-source, local-network-first case tracking application 
 
 > This independent project is not affiliated with the established Open Dental practice-management product. “Lab” is part of the displayed name to make its dental-laboratory scope clear.
 
+> **Demo privacy notice:** Every patient and clinic name, contact detail, job, date, note and image shown in this repository, its screenshots and the seeded demo database is entirely fictional and randomly created for demonstration. None represents or refers to a real person, patient, clinic or clinical case.
+
 ![English dashboard](docs/screenshots/dashboard-en-v14.png)
 
 ## Highlights
@@ -93,7 +95,7 @@ dotnet tool install --global dotnet-ef --version 8.*
 dotnet ef database update --project backend/OpenDentalFlow.Api --startup-project backend/OpenDentalFlow.Api
 ```
 
-A new empty installation receives realistic synthetic demo clinics, patients, jobs, activities, notes and two AI-generated laboratory images. The demo images contain no real patient or identifying data. Seeding runs only when the user table is empty and never replaces an existing installation.
+A new empty installation receives realistic synthetic demo clinics, patients, jobs, activities, notes and two AI-generated laboratory images. All displayed names, records and image contents are fictional and randomly created exclusively for demonstration; they contain no real patient, clinic or identifying data. Seeding runs only when the user table is empty and never replaces an existing installation.
 
 ## Local network and `lab.local`
 
