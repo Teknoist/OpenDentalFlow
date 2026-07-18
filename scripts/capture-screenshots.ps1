@@ -2,7 +2,8 @@ param(
     [string]$BaseUrl = "http://localhost:5080",
     [string]$Username = "admin",
     [Parameter(Mandatory = $true)][string]$Password,
-    [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\docs\screenshots")
+    [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\docs\screenshots"),
+    [switch]$OnlyLabel
 )
 
 $ErrorActionPreference = "Stop"
@@ -91,10 +92,23 @@ try {
 "@
     Send-Cdp "Runtime.evaluate" @{ expression = $expression; awaitPromise = $true; returnByValue = $true } | Out-Null
 
-    Navigate-And-Capture "/" "dashboard-en-v14.png"
-    Navigate-And-Capture "/gallery" "gallery-en-v14.png"
-    Navigate-And-Capture "/jobs/1" "job-detail-en-v14.png"
-    Get-ChildItem -LiteralPath $OutputDirectory -Filter "*-en-v14.png" | Select-Object Name, Length
+    if ($OnlyLabel) {
+        Send-Cdp "Page.navigate" @{ url = "$BaseUrl/label/1" } | Out-Null
+        Start-Sleep -Milliseconds 1500
+        $labelShot = Send-Cdp "Page.captureScreenshot" @{
+            format = "png"; fromSurface = $true; captureBeyondViewport = $false
+            clip = @{ x = 230; y = 0; width = 340; height = 300; scale = 2 }
+        }
+        $labelPath = Join-Path $OutputDirectory "barcode-label-en-v14-v3.png"
+        [IO.File]::WriteAllBytes($labelPath, [Convert]::FromBase64String($labelShot.data))
+        Get-Item -LiteralPath $labelPath | Select-Object Name, Length
+    }
+    else {
+        Navigate-And-Capture "/" "dashboard-en-v14.png"
+        Navigate-And-Capture "/gallery" "gallery-en-v14.png"
+        Navigate-And-Capture "/jobs/1" "job-detail-en-v14.png"
+        Get-ChildItem -LiteralPath $OutputDirectory -Filter "*-en-v14.png" | Select-Object Name, Length
+    }
 }
 finally {
     if ($socket) { $socket.Dispose() }

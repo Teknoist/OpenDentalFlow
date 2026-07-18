@@ -29,6 +29,20 @@ OpenDental Lab ist eine quelloffene, lokale Auftragsverwaltung für Dentallabore
 
 ![Fotogalerie](docs/screenshots/gallery-en-v14.png)
 
+## Barcode- und Etikettenablauf
+
+![QR- und Code-128-Etikettenvorschau](docs/screenshots/barcode-label-en-v14-v3.png)
+
+- Jeder Auftrag besitzt genau einen unveränderlichen, lesbaren Auftragscode, zum Beispiel `MRD-001-1`.
+- Der lineare Barcode verwendet **Code 128** und enthält ausschließlich diesen Auftragscode. Patientenname, Notizen, Fotos und QR-Zugriffsschlüssel sind nicht darin gespeichert.
+- Der QR-Code ist getrennt. Er enthält die konfigurierte LAN-Adresse und den nicht erratbaren Zugriffsschlüssel des Auftrags und öffnet die eingeschränkte mobile Auftragsseite.
+- Die Etikettenvorschau lädt beide Bilder über `GET /api/jobs/{id}/label`; einzelne PNG-Endpunkte stehen unter `/label/barcode` und `/label/qr` bereit.
+- Ein USB-Barcodescanner arbeitet normalerweise wie eine Tastatur. Das Schnellsuchfeld fokussieren, scannen und den im Scanner konfigurierten `Enter/CR`-Abschluss senden lassen. Die Anwendung sucht den exakten Auftragscode und öffnet den Auftrag direkt.
+- `F9` speichert ohne Druck. `F10` speichert und sendet das 70 × 50 mm Etikett ohne Browserdialog direkt an den unter Einstellungen gewählten Windows-Drucker.
+- Für Tests ohne Hardware **OpenDental Test Printer (PNG)** wählen. Bei einem physischen Scanner Code 128 und ein `Enter`-Suffix gemäß Handbuch aktivieren.
+
+Der Patientenname darf zur Laborhandhabung sichtbar auf dem Etikett stehen, wird jedoch weder im Code-128-Inhalt noch in der QR-URL gespeichert. Die Druckschicht ist für spätere ZPL-/TSPL-Transporte abstrahiert.
+
 ## Einzelne Windows-Anwendung
 
 `OpenDentalLab-Windows-x64-v1.4.0-test.zip` entpacken und `OpenDentalLab.exe` starten. Terminal, Browser, Node.js und .NET sind nicht erforderlich. Daten bleiben unter `%LOCALAPPDATA%\OpenDentalFlow` erhalten.
@@ -77,7 +91,7 @@ Eine neue leere Installation erhält realistische, vollständig synthetische Kli
 
 1. Server-PC und Telefone mit demselben vertrauenswürdigen LAN/WLAN verbinden.
 2. IPv4-Adresse mit `ipconfig` ermitteln.
-3. `http://SERVER-IP:5080` am Telefon testen.
+3. `http://SERVER-IP:5080` am Telefon testen. Port `5173` dient nur der Entwicklung und darf mit der Paket-App nicht verwendet werden.
 4. Unter **Einstellungen → QR-Basisadresse** diese Adresse oder besser `http://lab.local:5080` speichern.
 5. Vor dauerhaften Etiketten den exakten QR-Link testen.
 

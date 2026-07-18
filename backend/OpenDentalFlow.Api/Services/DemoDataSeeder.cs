@@ -120,9 +120,16 @@ public sealed class DemoDataSeeder(
 
     private async Task EnsureSettingAsync(string key, string value)
     {
-        if (!await db.SystemSettings.AnyAsync(x => x.Key == key))
+        var setting = await db.SystemSettings.SingleOrDefaultAsync(x => x.Key == key);
+        if (setting is null)
             db.SystemSettings.Add(new SystemSetting { Key = key, Value = value });
+        else if (key == "PublicBaseUrl" && IsLegacyDevelopmentUrl(setting.Value))
+            setting.Value = value;
     }
+
+    private static bool IsLegacyDevelopmentUrl(string value) =>
+        value.Equals("http://lab.local:5173", StringComparison.OrdinalIgnoreCase) ||
+        value.Equals("http://localhost:5173", StringComparison.OrdinalIgnoreCase);
 
     private static Clinic Clinic(string name, string code, string? phone, string address, string notes, int sequence, DateTime createdAt) =>
         new() { Name = name, ShortCode = code, Phone = phone, Address = address, Notes = notes, LastPatientSequence = sequence, CreatedAt = createdAt };

@@ -1,4 +1,7 @@
 using System.Diagnostics;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +20,20 @@ Directory.CreateDirectory(dataRoot);
 Directory.CreateDirectory(Path.Combine(dataRoot, "uploads"));
 var port = builder.Configuration.GetValue("Port", 5080);
 var localUrl = $"http://localhost:{port}";
+var configuredPublicBaseUrl = builder.Configuration["PublicBaseUrl"]?.Trim().TrimEnd('/');
+var detectedLanAddress = NetworkInterface.GetAllNetworkInterfaces()
+    .Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType is not NetworkInterfaceType.Loopback)
+    .OrderByDescending(x => x.GetIPProperties().GatewayAddresses.Count > 0)
+    .SelectMany(x => x.GetIPProperties().UnicastAddresses)
+    .Select(x => x.Address)
+    .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(x));
+var detectedPublicBaseUrl = $"http://{detectedLanAddress ?? IPAddress.Loopback}:{port}";
+if (string.IsNullOrWhiteSpace(configuredPublicBaseUrl) ||
+    configuredPublicBaseUrl.Equals("http://lab.local:5173", StringComparison.OrdinalIgnoreCase) ||
+    configuredPublicBaseUrl.Equals("http://localhost:5173", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Configuration["PublicBaseUrl"] = detectedPublicBaseUrl;
+}
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite($"Data Source={Path.Combine(dataRoot, "opendentalflow.db")}"));
 builder.Services.AddScoped<IShortCodeService, ShortCodeService>(); builder.Services.AddSingleton<ICodeService, CodeService>(); builder.Services.AddSingleton<ILabelService, LabelService>(); builder.Services.AddScoped<IFileStorage, LocalFileStorage>();

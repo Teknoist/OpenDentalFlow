@@ -29,6 +29,20 @@ OpenDental Lab, diş laboratuvarları için açık kaynak ve yerel ağ öncelikl
 
 ![Fotoğraf galerisi](docs/screenshots/gallery-en-v14.png)
 
+## Barkod ve etiket çalışma mantığı
+
+![QR ve Code 128 etiket önizlemesi](docs/screenshots/barcode-label-en-v14-v3.png)
+
+- Her işin `MRD-001-1` gibi değiştirilemez ve insan tarafından okunabilen tek bir iş kodu vardır.
+- Çizgili barkod **Code 128** formatındadır ve yalnızca bu iş kodunu taşır. Hasta adı, not, fotoğraf verisi veya QR erişim anahtarı barkodun içinde bulunmaz.
+- QR kod ayrıdır. Ayarlanan yerel ağ adresini ve işe ait tahmin edilemez erişim anahtarını taşır; sınırlı yetkili mobil iş sayfasını açar.
+- Etiket önizlemesi iki görseli `GET /api/jobs/{id}/label` üzerinden alır. Barkod ve QR için `/label/barcode` ile `/label/qr` PNG uçları da vardır.
+- USB barkod okuyucu genellikle klavye gibi çalışır. İş listesinde hızlı arama alanı odaktayken etiket okutulur; okuyucunun `Enter/CR` son eki gelince sistem tam iş kodunu arar ve doğrudan iş detayını açar.
+- `F9` yalnızca kaydeder. `F10`, işi kaydeder ve 70 × 50 mm etiketi Ayarlar'da seçilen Windows yazıcısına tarayıcı baskı penceresi göstermeden gönderir.
+- Donanım olmadan denemek için **OpenDental Test Printer (PNG)** seçilir. Fiziksel okuyucuda Code 128 etkin olmalı ve kullanım kılavuzundan `Enter` son eki ayarlanmalıdır.
+
+Etiket üzerinde laboratuvar kullanımı için hasta adı görünür olabilir; ancak ne Code 128 barkodun ne de QR URL’sinin içine hasta adı yazılır. Yazdırma katmanı gelecekte ZPL/TSPL eklenebilecek şekilde soyutlanmıştır.
+
 ## Tek program olarak kurulum
 
 `OpenDentalLab-Windows-x64-v1.4.0-test.zip` dosyasını bir klasöre çıkarın ve `OpenDentalLab.exe` dosyasını çalıştırın. CMD, tarayıcı, Node.js veya .NET gerekmez. Veriler `%LOCALAPPDATA%\OpenDentalFlow` altında saklandığı için program güncellenince kaybolmaz.
@@ -77,7 +91,7 @@ Yeni boş kurulumda gerçekçi fakat tamamen sentetik klinik, hasta, iş, işlem
 
 1. Bilgisayar ve telefonları aynı güvenilir Wi-Fi’a bağlayın.
 2. `ipconfig` ile bilgisayarın IPv4 adresini bulun.
-3. Telefonda `http://SUNUCU-IP:5080` adresini deneyin.
+3. Telefonda `http://SUNUCU-IP:5080` adresini deneyin. `5173` yalnız geliştirme portudur ve paketli uygulamada kullanılmamalıdır.
 4. **Ayarlar → QR ana adresi** alanına bu adresi veya tercihen `http://lab.local:5080` yazın.
 5. Kalıcı etiket basmadan önce QR’ı telefonla test edin.
 

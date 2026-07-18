@@ -2345,7 +2345,7 @@ function Label() {
       {message && <p className="success no-print">{message}</p>}
       {error && <p className="error no-print">{error}</p>}
       <div className="label">
-        <div>
+        <div className="label-main">
           <small>{job.clinic.name}</small>
           <h1>{job.jobCode}</h1>
           <b>
@@ -2354,17 +2354,17 @@ function Label() {
           <p>
             {job.jobType} · {job.material} · {job.shade}
             <br />
-            Diş: {job.teeth} · {job.unitCount} üye
+            {tt("teeth")}: {job.teeth} · {job.unitCount} {tt("unitCount")}
             <br />
-            Teslim: {job.dueDate?.slice(0, 10)}
+            {tt("dueDate")}: {job.dueDate?.slice(0, 10)}
           </p>
-          <img
-            className="barcode"
-            src={label.barcodeData}
-            alt={`Code 128 ${job.jobCode}`}
-          />
         </div>
         <img className="qr" src={label.qrData} alt={`QR ${job.jobCode}`} />
+        <img
+          className="barcode"
+          src={label.barcodeData}
+          alt={`Code 128 ${job.jobCode}`}
+        />
       </div>
     </>
   );

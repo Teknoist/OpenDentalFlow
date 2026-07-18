@@ -29,6 +29,20 @@ OpenDental Lab is an open-source, local-network-first case tracking application 
 
 ![Photo gallery](docs/screenshots/gallery-en-v14.png)
 
+## Barcode and label workflow
+
+![QR and Code 128 label preview](docs/screenshots/barcode-label-en-v14-v3.png)
+
+- Each job has one immutable human-readable job code, for example `MRD-001-1`.
+- The linear barcode is **Code 128** and contains only that job code. It does not contain the patient name, notes, photo data or QR access token.
+- The QR code is separate. It contains the configured LAN URL plus the job's unpredictable public access token and opens the limited mobile job page.
+- The label preview obtains both images from `GET /api/jobs/{id}/label`; standalone PNG endpoints are also available at `/label/barcode` and `/label/qr`.
+- A USB barcode scanner normally behaves like a keyboard. Keep the quick-search field focused, scan the label and let the scanner send its configured `Enter/CR` suffix. The UI calls the exact job-code lookup and opens that job directly.
+- `F9` saves without printing. `F10` saves and sends the 70 × 50 mm label directly to the Windows printer selected in Settings, without a browser print dialog.
+- Select **OpenDental Test Printer (PNG)** to test without hardware. For physical scanners, enable Code 128 and configure an `Enter` suffix in the scanner manual.
+
+The printed label may visibly show the patient name for laboratory handling, but neither the Code 128 barcode nor the QR URL embeds that name. The native print service is abstracted for future ZPL/TSPL transports.
+
 ## Technology
 
 - ASP.NET Core 8 Web API, Entity Framework Core and SQLite
@@ -101,7 +115,7 @@ A new empty installation receives realistic synthetic demo clinics, patients, jo
 
 1. Connect the server PC and phones to the same trusted LAN/Wi-Fi.
 2. Find the server IPv4 address with `ipconfig`.
-3. Test `http://SERVER-IP:5080` on a phone.
+3. Test `http://SERVER-IP:5080` on a phone. Port `5173` is development-only and must not be used by the packaged application.
 4. In **Settings**, set the QR base URL to that address or preferably `http://lab.local:5080`.
 5. Test the exact QR URL before printing permanent labels.
 
